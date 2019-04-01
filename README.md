@@ -2,25 +2,25 @@
 
 ![Instant Shakespeare](https://i.imgur.com/9jUNGau.gif)
 
-An app that allows you to randomly grab a Shakespeare sonnet. I love Shakespeare.
-
-Includes night mode, and line count.
+An app that allows you to randomly grab a Shakespeare sonnet. Includes night mode, and line count for a better Shakespeare reading experience.
 
 I'm using [PoetryDB](http://poetrydb.org/index.html) to get the sonnets themselves, and it is licensed under the [GNU Public License v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
 
-## Targets/Instructions
+## Targets, Instructions, other Logistics
 
 I don't have an iOS developer account. Actually, this is my first time building a full-on mobile app!
 
 The device I simulated was the **iPhone X**, running on **iOS 12.1**. So it'd probably be best if you ran it on that platform.
 
-I have no special instructions. Just an ordinary Flutter app. 
+I have no special instructions. Just an ordinary Flutter app. I only used [http](https://pub.dartlang.org/packages/http) and [RxDart](https://pub.dartlang.org/packages/rxdart) as far as external dependencies go.
 
 Maybe just `flutter packages get` to install `http` and `rxdart`?
 
 ## Why did I build this?
 
 * Current poetry reading solutions on mobile are not that great.
+* One of my friends off-handedly mentioned Flutter, and it sounded interesting.
+* I wanted to break into getting to know [ReactiveX](http://reactivex.io/) in some way, as well as the BLoC pattern.
 * I wanted to create something that inched towards a _good_ poetry reader on mobile. That includes theme changing and line count.
 * Really, I just love Shakespeare.
 
