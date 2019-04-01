@@ -7,8 +7,7 @@ import 'dart:math';
 void main() => runApp(App());
 
 final ThemeBloc themeBloc = ThemeBloc();
-final SonnetAPI api = new SonnetAPI();
-final SonnetBloc sonnetBloc = SonnetBloc(api);
+final SonnetBloc sonnetBloc = SonnetBloc(new SonnetAPI());
 
 class App extends StatelessWidget {
   @override
@@ -17,12 +16,12 @@ class App extends StatelessWidget {
       stream: themeBloc.theme,
       initialData: true,
       builder: (BuildContext ctx, AsyncSnapshot<bool> snapshot) => MaterialApp(
-            theme: ThemeData(
-              fontFamily: "Lora",
-              brightness: (snapshot.data ? Brightness.dark : Brightness.light),
-            ),
-            home: Home(),
-          ),
+        theme: ThemeData(
+          fontFamily: "Lora",
+          brightness: (snapshot.data ? Brightness.dark : Brightness.light),
+        ),
+        home: Home(),
+      ),
     );
   }
 }
@@ -35,18 +34,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _sonnet = 0;
+  bool _lineCount = false;
+
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(
         title: Text((_sonnet == 0 ? "" : 'Sonnet $_sonnet')),
         elevation: 0,
+        brightness: Theme.of(ctx).brightness,
         backgroundColor: Theme.of(ctx).scaffoldBackgroundColor,
         textTheme: Theme.of(ctx).textTheme,
         iconTheme: Theme.of(ctx).iconTheme,
         actions: <Widget>[
           IconButton(
-            onPressed: () => print(""),
+            onPressed: () => setState(() {
+              if (_sonnet != 0) _lineCount = !_lineCount;
+            }),
             icon: Icon(Icons.format_list_numbered),
           ),
           IconButton(
@@ -71,24 +75,23 @@ class _HomeState extends State<Home> {
           stream: sonnetBloc.sonnet,
           initialData: [""],
           builder: (BuildContext ctx, AsyncSnapshot<List<String>> snapshot) =>
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: new List<Widget>.from([
-                  SizedBox(width: 10),
-                  Text(
-                      (snapshot.data[0] == "" ? "Refresh for a Shakespeare Sonnet :)" : '"${snapshot.data[0].replaceAll(new RegExp(r"(,$|;$)"), '')}..."'),
-                      style: TextStyle(
-                          height: 1,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold)),
-                  SizedBox(height: 20),
-                ])
-                  ..addAll(snapshot.data
-                      .map<Widget>((line) => Text(line,
-                          style: TextStyle(height: 1.5, fontSize: 15)))
-                      .toList()),
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: new List<Widget>.from([
+                SizedBox(width: 10),
+                Text(
+                  (snapshot.data[0] == "" ? "Refresh for a Shakespeare Sonnet :)" : '"${snapshot.data[0].replaceAll(new RegExp(r"(,$|;$)"), '')}..."'),
+                  style: TextStyle(
+                    height: 1,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+                SizedBox(height: 20),
+              ])..addAll(snapshot.data.map<Widget>((line) => Text(
+                  _lineCount ? '[${snapshot.data.indexOf(line) + 1}] $line' : line,
+                  style: TextStyle(height: 1.5, fontSize: 14),
+                )).toList()),
+            )
         ),
       ),
     );

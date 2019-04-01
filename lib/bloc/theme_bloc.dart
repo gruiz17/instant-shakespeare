@@ -6,7 +6,7 @@ class ThemeBloc {
   final Stream<bool> theme;
   factory ThemeBloc() {
     final tChange = new PublishSubject<bool>();
-    final theme = tChange.scan<bool>((acc, curr, i) => (curr == acc)).startWith(true);
+    final theme = tChange.scan<bool>((ac, cur, i) => (cur == ac)).startWith(true);
     return ThemeBloc._(tChange, theme);
   }
   ThemeBloc._(this.themeChange, this.theme);

@@ -9,7 +9,7 @@ class SonnetBloc {
   factory SonnetBloc(SonnetAPI api) {
     final sChange = new PublishSubject<int>();
     final sonnet = sChange
-        .flatMap<Sonnet>((sNumber) => _get(sNumber, api))
+        .flatMap<Sonnet>((sNum) => _get(sNum, api))
         .map<List<String>>((sonnet) => sonnet.lines);
     return SonnetBloc._(sChange, sonnet);
   }
