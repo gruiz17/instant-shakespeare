@@ -6,12 +6,12 @@ import '../data/get_sonnet.dart';
 class SonnetBloc {
   final Sink<int> sonnetChange;
   final Stream<List<String>> sonnet;
-  factory SonnetBloc(SonnetAPI sonnetAPI) {
-    final sonnetChange = new PublishSubject<int>();
-    final sonnet = sonnetChange
-        .flatMap<Sonnet>((sNumber) => _get(sNumber, sonnetAPI))
+  factory SonnetBloc(SonnetAPI api) {
+    final sChange = new PublishSubject<int>();
+    final sonnet = sChange
+        .flatMap<Sonnet>((sNumber) => _get(sNumber, api))
         .map<List<String>>((sonnet) => sonnet.lines);
-    return SonnetBloc._(sonnetChange, sonnet);
+    return SonnetBloc._(sChange, sonnet);
   }
   SonnetBloc._(this.sonnetChange, this.sonnet);
   void dispose() => sonnetChange.close();
