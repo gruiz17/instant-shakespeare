@@ -4,61 +4,52 @@ import 'package:shakespeare_sonnet/bloc/sonnet_bloc.dart';
 import 'package:shakespeare_sonnet/resources/get_sonnet.dart';
 import 'dart:math';
 
-void main() => runApp(MyApp());
+void main() => runApp(App());
 
 final ThemeBloc themeBloc = ThemeBloc();
 final SonnetAPI sonnetAPI = new SonnetAPI();
 final SonnetBloc sonnetBloc = SonnetBloc(sonnetAPI);
 
 Random rnd = new Random();
-int min = 1, max = 155;
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   Brightness brightness;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        stream: themeBloc.theme,
-        initialData: true,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
-            MaterialApp(
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  brightness:
-                      (snapshot.data ? Brightness.dark : Brightness.light)),
-              home: MyHomePage(title: 'Flutter Demo Home Page'),
-            ));
+      stream: themeBloc.theme,
+      initialData: true,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+        MaterialApp(
+          theme: ThemeData(brightness: (snapshot.data ? Brightness.dark : Brightness.light)),
+          home: Home(),
+        ),
+    );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
       body: Container(
         margin: const EdgeInsets.all(20.0),
         child: StreamBuilder<List<String>>(
           stream: sonnetBloc.sonnet,
           initialData: ["Hello", "Welcome to Sonnets!"],
-          builder:
-              (BuildContext context, AsyncSnapshot<List<String>> snapshot) =>
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: snapshot.data
-                        .map<Widget>((line) => Text(line,
-                            style: TextStyle(height: 1.5, fontSize: 15.5)))
-                        .toList(),
-                  ),
+          builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) =>
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: snapshot.data.map<Widget>((line) => 
+                Text(line, style: TextStyle(height: 1.5, fontSize: 15.5))).toList(),
+            ),
         ),
       ),
       floatingActionButton: Row(
@@ -66,14 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           FloatingActionButton(
             onPressed: () => themeBloc.themeChange.add(false),
-            tooltip: 'Theme',
             child: Icon(Icons.access_alarm),
           ),
           SizedBox(width: 10.0),
           FloatingActionButton(
-            onPressed: () =>
-                sonnetBloc.onSonnetChanged.add(min + rnd.nextInt(max - min)),
-            tooltip: 'Random Sonnet',
+            onPressed: () => sonnetBloc.onSonnetChanged.add(1 + rnd.nextInt(154)),
             child: Icon(Icons.add),
           ),
         ],

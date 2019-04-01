@@ -9,9 +9,8 @@ class SonnetAPI {
     return _sonnetAPI;
   }
   SonnetAPI._internal();
-
   Future<Sonnet> getSonnet(int sonnetNumber) async {
-    String _uriSonnetNumber = Uri.encodeComponent('Sonnet ${sonnetNumber}');
+    String _uriSonnetNumber = Uri.encodeComponent('Sonnet $sonnetNumber');
     String _uri = 'http://poetrydb.org/author,title/Shakespeare;$_uriSonnetNumber:';
     var response = await http.get(_uri);
     List<dynamic> jsonObj = json.decode(response.body);
