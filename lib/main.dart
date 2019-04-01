@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shakespeare_sonnet/bloc/theme_bloc.dart';
-import 'package:shakespeare_sonnet/bloc/sonnet_bloc.dart';
-import 'package:shakespeare_sonnet/resources/get_sonnet.dart';
+import 'bloc/theme_bloc.dart';
+import 'bloc/sonnet_bloc.dart';
+import 'resources/get_sonnet.dart';
 import 'dart:math';
 
 void main() => runApp(App());

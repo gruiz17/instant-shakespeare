@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shakespeare_sonnet/models/sonnet.dart';
+import '../models/sonnet.dart';
 
 class SonnetAPI {
   static final SonnetAPI _sonnetAPI = new SonnetAPI._internal();
