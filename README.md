@@ -6,11 +6,13 @@ An app that allows you to randomly grab a Shakespeare sonnet. Includes night mod
 
 I'm using [PoetryDB](http://poetrydb.org/index.html) to get the sonnets themselves, and it is licensed under the [GNU Public License v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
 
+I'm Gabriel Ruiz, a software developer from the Bay Area. I work as a frontend developer. [Here is my GitHub](https://github.com/gruiz17). Actually, this is my first time building a full-on mobile app!
+
 ## Targets, Instructions, other Logistics
 
-I don't have an iOS developer account. Actually, this is my first time building a full-on mobile app!
+I don't have an iOS developer account. I just used the emulator.
 
-The device I simulated was the **iPhone X**, running on **iOS 12.1**. So it'd probably be best if you ran it on that platform.
+The device I emulated was the **iPhone X**, running on **iOS 12.1**. So it'd probably be best if you ran it on that platform.
 
 I have no special instructions. Just an ordinary Flutter app. I only used [http](https://pub.dartlang.org/packages/http) and [RxDart](https://pub.dartlang.org/packages/rxdart) as far as external dependencies go.
 
