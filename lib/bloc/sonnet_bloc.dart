@@ -1,22 +1,20 @@
 import 'dart:async';
 import 'package:rxdart/subjects.dart';
 import '../models/sonnet.dart';
-import '../resources/get_sonnet.dart';
+import '../data/get_sonnet.dart';
 
 class SonnetBloc {
-  final Sink<int> onSonnetChanged;
+  final Sink<int> sonnetChange;
   final Stream<List<String>> sonnet;
   factory SonnetBloc(SonnetAPI sonnetAPI) {
-    final onSonnetChanged = new PublishSubject<int>();
-    final sonnet = onSonnetChanged.flatMap<Sonnet>((sNumber) => _getSonnet(sNumber, sonnetAPI))
+    final sonnetChange = new PublishSubject<int>();
+    final sonnet = sonnetChange.flatMap<Sonnet>((sNumber) => _get(sNumber, sonnetAPI))
       .map<List<String>>((sonnet) => sonnet.lines);
-    return SonnetBloc._(onSonnetChanged, sonnet);
+    return SonnetBloc._(sonnetChange, sonnet);
   }
-  SonnetBloc._(this.onSonnetChanged, this.sonnet);
-  void dispose() {
-    onSonnetChanged.close();
-  }
+  SonnetBloc._(this.sonnetChange, this.sonnet);
+  void dispose() => sonnetChange.close();
 }
-Stream<Sonnet> _getSonnet(int sonnetNumber, SonnetAPI api) async* {
+Stream<Sonnet> _get(int sonnetNumber, SonnetAPI api) async* {
   yield await api.getSonnet(sonnetNumber);
 }

@@ -5,12 +5,10 @@ class ThemeBloc {
   final Sink<bool> themeChange; 
   final Stream<bool> theme;
   factory ThemeBloc() {
-    final onThemeChange = new PublishSubject<bool>();
-    final theme = onThemeChange.scan<bool>((a,c,i) => (c==a)).startWith(true);
-    return ThemeBloc._(onThemeChange, theme);
+    final themeChange = new PublishSubject<bool>();
+    final theme = themeChange.scan<bool>((a,c,i) => (c==a)).startWith(true);
+    return ThemeBloc._(themeChange, theme);
   }
   ThemeBloc._(this.themeChange, this.theme);
-  void dispose() {
-    themeChange.close();
-  }
+  void dispose() => themeChange.close(); 
 }
