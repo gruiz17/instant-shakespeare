@@ -53,8 +53,9 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.brightness_3),
           ),
           IconButton(
-            onPressed: () => sonnetBloc.sonnetChange.add(1 + (new Random()).nextInt(154)),
-            icon: Icon(Icons.add),
+            onPressed: () =>
+                sonnetBloc.sonnetChange.add(1 + (new Random()).nextInt(154)),
+            icon: Icon(Icons.refresh),
           ),
         ],
       ),
@@ -65,12 +66,21 @@ class _HomeState extends State<Home> {
           initialData: ["Click 'Random'!"],
           builder: (BuildContext ctx, AsyncSnapshot<List<String>> snapshot) =>
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: snapshot.data
-                    .map<Widget>((line) => Text(line,
-                        style: TextStyle(height: 1.5, fontSize: 15.5)))
-                    .toList(),
+                children: new List<Widget>.from([
+                  SizedBox(width: 10.0),
+                  Text('"${snapshot.data[0].replaceAll(new RegExp(r"(,$|;$)"), '')}..."',
+                      style: TextStyle(
+                          height: 1.0,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(height: 20.0),
+                ])
+                  ..addAll(snapshot.data
+                      .map<Widget>((line) => Text(line,
+                          style: TextStyle(height: 1.5, fontSize: 15.0)))
+                      .toList()),
               ),
         ),
       ),
