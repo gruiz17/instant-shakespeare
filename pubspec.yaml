@@ -18,7 +18,6 @@ environment:
 
 dependencies:
   http: ^0.12.0+1
-  sqflite: ^1.1.0
   rxdart: ^0.21.0
   flutter:
     sdk: flutter

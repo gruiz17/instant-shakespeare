@@ -18,9 +18,11 @@ class App extends StatelessWidget {
       stream: themeBloc.theme,
       initialData: true,
       builder: (BuildContext ctx, AsyncSnapshot<bool> snapshot) => MaterialApp(
-        theme: ThemeData(brightness: (snapshot.data ? Brightness.dark : Brightness.light)),
-        home: Home(),
-      ),
+            theme: ThemeData(
+              brightness: (snapshot.data ? Brightness.dark : Brightness.light),
+            ),
+            home: Home(),
+          ),
     );
   }
 }
@@ -35,32 +37,42 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Sonnet 1"),
+        elevation: 0.0,
+        backgroundColor: Theme.of(ctx).scaffoldBackgroundColor,
+        textTheme: Theme.of(ctx).textTheme,
+        iconTheme: Theme.of(ctx).iconTheme,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => print("lol"),
+            icon: Icon(Icons.format_list_numbered),
+          ),
+          IconButton(
+            onPressed: () => themeBloc.themeChange.add(false),
+            icon: Icon(Icons.brightness_3),
+          ),
+          IconButton(
+            onPressed: () => sonnetBloc.sonnetChange.add(1 + (new Random()).nextInt(154)),
+            icon: Icon(Icons.add),
+          ),
+        ],
+      ),
       body: Container(
         margin: const EdgeInsets.all(20.0),
         child: StreamBuilder<List<String>>(
           stream: sonnetBloc.sonnet,
           initialData: ["Click 'Random'!"],
-          builder: (BuildContext ctx, AsyncSnapshot<List<String>> snapshot) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: snapshot.data.map<Widget>((line) => 
-              Text(line, style: TextStyle(height: 1.5, fontSize: 15.5))).toList(),
-          ),
+          builder: (BuildContext ctx, AsyncSnapshot<List<String>> snapshot) =>
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: snapshot.data
+                    .map<Widget>((line) => Text(line,
+                        style: TextStyle(height: 1.5, fontSize: 15.5)))
+                    .toList(),
+              ),
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-            onPressed: () => themeBloc.themeChange.add(false),
-            child: Icon(Icons.access_alarm),
-          ),
-          SizedBox(width: 10.0),
-          FloatingActionButton(
-            onPressed: () => sonnetBloc.sonnetChange.add(1 + (new Random()).nextInt(154)),
-            child: Icon(Icons.add),
-          ),
-        ],
       ),
     );
   }
