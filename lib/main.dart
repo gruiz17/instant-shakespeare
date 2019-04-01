@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:shakespeare_sonnet/bloc/events.dart';
 import 'package:shakespeare_sonnet/bloc/theme_bloc.dart';
 
 void main() => runApp(MyApp());
 
 final ThemeBloc themeBloc = ThemeBloc();
 
-Map<String, Brightness> themeMap = {
-  "dark": Brightness.dark,
-  "light": Brightness.light,
-};
-
 class MyApp extends StatelessWidget {
   Brightness brightness;
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
+    return StreamBuilder<bool>(
       stream: themeBloc.theme,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
         MaterialApp(
           title: 'Flutter Demo',
-          theme: ThemeData(primarySwatch: Colors.blue, brightness: themeMap[snapshot.data]),
+          theme: ThemeData(primarySwatch: Colors.blue, brightness: (snapshot.data ? Brightness.dark :Brightness.light)),
           home: MyHomePage(title: 'Flutter Demo Home Page'),
         )
     );
@@ -72,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
         child: Icon(Icons.add),
-        onPressed: () => themeBloc.themeChange.add(DarkModeEvent()),
+        onPressed: () => themeBloc.themeChange.add(true),
       ),
     );
   }
