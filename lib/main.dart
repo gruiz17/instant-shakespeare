@@ -15,11 +15,11 @@ Random rnd = new Random();
 class App extends StatelessWidget {
   Brightness brightness;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return StreamBuilder<bool>(
       stream: themeBloc.theme,
       initialData: true,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+      builder: (BuildContext ctx, AsyncSnapshot<bool> snapshot) =>
         MaterialApp(
           theme: ThemeData(brightness: (snapshot.data ? Brightness.dark : Brightness.light)),
           home: Home(),
@@ -36,14 +36,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.all(20.0),
         child: StreamBuilder<List<String>>(
           stream: sonnetBloc.sonnet,
-          initialData: ["Hello", "Welcome to Sonnets!"],
-          builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) =>
+          initialData: ["Click 'Random'!"],
+          builder: (BuildContext ctx, AsyncSnapshot<List<String>> snapshot) =>
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
