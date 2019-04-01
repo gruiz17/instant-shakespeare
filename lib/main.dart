@@ -1,111 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:shakespeare_sonnet/bloc/events.dart';
+import 'package:shakespeare_sonnet/bloc/theme_bloc.dart';
 
 void main() => runApp(MyApp());
 
+final ThemeBloc themeBloc = ThemeBloc();
+
+Map<String, Brightness> themeMap = {
+  "dark": Brightness.dark,
+  "light": Brightness.light,
+};
+
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  Brightness brightness;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return StreamBuilder<String>(
+      stream: themeBloc.theme,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
+        MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(primarySwatch: Colors.blue, brightness: themeMap[snapshot.data]),
+          home: MyHomePage(title: 'Flutter Demo Home Page'),
+        )
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    List<String> lines = [
+      "From fairest creatures we desire increase,",
+      "That thereby beauty's rose might never die,",
+      "But as the riper should by time decease,",
+      "His tender heir might bear his memory:",
+      "But thou contracted to thine own bright eyes,",
+      "Feed'st thy light's flame with self-substantial fuel,",
+      "Making a famine where abundance lies,",
+      "Thy self thy foe, to thy sweet self too cruel:",
+      "Thou that art now the world's fresh ornament,",
+      "And only herald to the gaudy spring,",
+      "Within thine own bud buriest thy content,",
+      "And tender churl mak'st waste in niggarding:",
+      "  Pity the world, or else this glutton be,",
+      "  To eat the world's due, by the grave and thee."
+    ];
+
+    List<Widget> lineText = lines
+        .map<Widget>(
+            (line) => Text(line, style: TextStyle(height: 1.5, fontSize: 15.5)))
+        .toList();
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      appBar: AppBar(title: Text(widget.title)),
+      body: Container(
+        margin: const EdgeInsets.all(20.0),
         child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: lineText,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        onPressed: () => themeBloc.themeChange.add(DarkModeEvent()),
+      ),
     );
+  }
+}
+
+class Sonnet {
+  String title;
+  String author;
+  List<String> lines;
+  String linecount;
+
+  Sonnet({this.title, this.author, this.lines, this.linecount});
+
+  Sonnet.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    author = json['author'];
+    lines = json['lines'].cast<String>();
+    linecount = json['linecount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['author'] = this.author;
+    data['lines'] = this.lines;
+    data['linecount'] = this.linecount;
+    return data;
   }
 }
