@@ -9,7 +9,7 @@ class ThemeBloc {
     final theme =
         onThemeChange
         .scan<bool>((acc, curr, i) => (curr != acc))
-        .startWith(true);
+        .startWith(false);
     return ThemeBloc._(onThemeChange, theme);
   }
   ThemeBloc._(this.themeChange, this.theme);
